@@ -2,10 +2,9 @@ image: node:latest
 
 cache:
     path:
-	- node_modules/
+		- node_modules/
 
 sandbox:
     script:
-	- npm install
-	- ./node_modules/@angular/cli/bin/ng test --single-run=true
-	--browsers PhantomJS --watch=false
+		- npm install
+		- ./node_modules/@angular/cli/bin/ng test --single-run=true --browsers PhantomJS --watch=false
