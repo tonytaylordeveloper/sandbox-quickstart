@@ -1,8 +1,8 @@
 image: trion/ng-cli-karma
 
 cache:
-    paths:
-		- node_modules/
+  paths:
+    - node_modules/
 
 #sandbox:
 #    script:
@@ -10,14 +10,27 @@ cache:
 #		- ./node_modules/@angular/cli/bin/ng test --single-run=true --browsers PhantomJS --watch=false
 
 deploy_stage:
-    stage: deploy
-    environment: Stage
-    only:
+  stage: deploy
+  environment: Stage
+  only:
 	- master
-    script:
+  script:
 	- rm ./package-lock.json
 	- npm install
 	- ./node_modules/@angular/cli/bin/ng test --progress false --single-run=true --watch=false
 	- ./node_modules/@angular/cli/bin/ng e2e --progress false --single-run=true --watch=false
 	- ./node_modules/@angular/cli/bin/ng build --progress false --prod --base-href http://sandbox-quickstart-stage.surge.sh/
-		- ./node_modules/./bin/surge -p dist/sandbox-quickstart/ --domain sandbox-quickstart-stage.surge.sh
+	- ./node_modules/./bin/surge -p dist/sandbox-quickstart/ --domain sandbox-quickstart-stage.surge.sh
+
+deploy_production:
+  stage: deploy
+  environment: Production
+  only:
+	- tags
+  script:
+	- rm ./package-lock.json
+	- npm install
+	- ./node_modules/@angular/cli/bin/ng test --progress false --single-run=true --watch=false
+	- ./node_modules/@angular/cli/bin/ng e2e --progress false --single-run=true --watch=false
+	- ./node_modules/@angular/cli/bin/ng build --progress false --prod --base-href sandbox-quickstart.surge.sh/
+	- ./node_modules/./bin/surge -p dist/sandbox-quickstart/ --domain sandbox-quickstart.surge.sh
