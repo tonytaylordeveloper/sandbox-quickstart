@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+    angular:
+	    image: node
+            build:./src
+	    volumes:
+	    - /home/tonytaylor/workspace/web-app/sandbox-quickstart:/var/www/html
+	    ports:
+	    -3000:4200
+    api:
+	    image: node
+	        build:./server
+	    volumes:
+	        /home/tonytaylor/workspace/web-app/sandbox-quickstart:/var/www/server
+	    ports:
+	        - 3001:4201

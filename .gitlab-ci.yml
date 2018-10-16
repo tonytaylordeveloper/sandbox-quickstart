@@ -1,0 +1,25 @@
+image: docker
+
+services:
+    - docker:dind
+
+stages:
+    - test
+    - deploy
+
+test
+    stage: test
+    only:
+        - develop
+	- production
+    script:
+	- echo run tests in this section
+
+step-deploy-prod:
+    stage: deploy
+    only:
+	- production
+    script:
+	- echo development scripts run here
+    environment:production
+    when:manual
