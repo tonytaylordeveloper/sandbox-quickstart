@@ -1,4 +1,4 @@
-image: node:latest
+image: trion/ng-cli-karma
 
 cache:
     paths:
@@ -8,3 +8,16 @@ cache:
 #    script:
 #		- npm install
 #		- ./node_modules/@angular/cli/bin/ng test --single-run=true --browsers PhantomJS --watch=false
+
+deploy_stage:
+    stage: deploy
+    environment: Stage
+    only:
+	- master
+    script:
+	- rm ./package-lock.json
+	- npm install
+	- ./node_modules/@angular/cli/bin/ng test --progress false --single-run=true --watch=false
+	- ./node_modules/@angular/cli/bin/ng e2e --progress false --single-run=true --watch=false
+	- ./node_modules/@angular/cli/bin/ng build --progress false --prod --base-href http://sandbox-quickstart-stage.surge.sh/
+		- ./node_modules/./bin/surge -p dist/sandbox-quickstart/ --domain sandbox-quickstart-stage.surge.sh
