@@ -1,25 +1,10 @@
-image: docker
+image: node:latest
 
-services:
-    - docker:dind
+cache:
+    path:
+	- node_modules/
 
-stages:
-    - test
-    - deploy
-
-test
-    stage: test
-    only:
-        - develop
-	- production
+sandbox:
     script:
-	- echo run tests in this section
-
-step-deploy-prod:
-    stage: deploy
-    only:
-	- production
-    script:
-	- echo development scripts run here
-    environment:production
-    when:manual
+	- npm install
+	- ./node_modules/@angular/cli/bin/ng test --single-run=true --browsers PhantomJS --watch=false
